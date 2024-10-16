@@ -84,5 +84,34 @@ public class FloodFillGrid : MonoBehaviour
         }
     }
 
+    public int GetAdjacentMineCount(int x, int y)
+{
+    int mineCount = 0;
+
+    // Loop over the surrounding 8 cells (including diagonals)
+    for (int dx = -1; dx <= 1; dx++)
+    {
+        for (int dy = -1; dy <= 1; dy++)
+        {
+            // Skip the current cell itself
+            if (dx == 0 && dy == 0) continue;
+
+            int checkX = x + dx;
+            int checkY = y + dy;
+
+            // Check if the neighboring cell is within bounds
+            if (checkX >= 0 && checkX < gridWidth && checkY >= 0 && checkY < gridHeight)
+            {
+                // If the cell is a mine, increment the count
+                if (grid[checkX, checkY].isMine)
+                {
+                    mineCount++;
+                }
+            }
+        }
+    }
+
+    return mineCount;
+}
 
 }

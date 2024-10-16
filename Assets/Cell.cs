@@ -8,6 +8,7 @@ public class Cell : MonoBehaviour
 
     private FloodFillGrid gridManager;
     private SpriteRenderer spriteRenderer;
+    private TextMesh textMesh; // TextMesh component for displaying the number
 
     public void Init(int x, int y, bool isMine, FloodFillGrid gridManager)
     {
@@ -18,6 +19,16 @@ public class Cell : MonoBehaviour
 
         spriteRenderer = GetComponent<SpriteRenderer>();
         gameObject.AddComponent<BoxCollider2D>();
+
+        // Add a TextMesh component for displaying numbers on the cell
+        textMesh = new GameObject("Text").AddComponent<TextMesh>();
+        textMesh.transform.SetParent(transform); // Set TextMesh as a child of the cell
+        textMesh.transform.localPosition = Vector3.zero; // Center it on the cell
+        textMesh.alignment = TextAlignment.Center;
+        textMesh.anchor = TextAnchor.MiddleCenter;
+        textMesh.characterSize = 0.2f; // Adjust the size as needed
+        textMesh.color = Color.white;
+        textMesh.text = ""; // Start with an empty string
     }
 
     public void OnMouseDown()
@@ -38,6 +49,15 @@ public class Cell : MonoBehaviour
     {
         isRevealed = true;
         SetColor(Color.grey); // Change the color when revealed
+
+        // Get the number of adjacent mines
+        int adjacentMines = gridManager.GetAdjacentMineCount(x, y);
+
+        // Display the number if there are any adjacent mines
+        if (adjacentMines > 0)
+        {
+            textMesh.text = adjacentMines.ToString();
+        }
     }
 
     public void SetColor(Color color)
